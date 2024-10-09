@@ -38,8 +38,9 @@ def get_attrs(image, name):
         try:
             # open image and rotate according to its exif.orientation
             width, height = get_backend().get_size(image)
-        except AttributeError:
-            # invalid image -> AttributeError
+        except BaseException:
+            # invalid image -> AttributeError or DecompressionBombError
+            logger.warning("Error while getting image size", exc_info=True)
             width = image.width
             height = image.height
         return {
